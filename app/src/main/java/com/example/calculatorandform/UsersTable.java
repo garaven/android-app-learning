@@ -51,10 +51,10 @@ public class UsersTable extends AppCompatActivity {
             cell.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         }
 
-        idCell.setText(user.id);
+        idCell.setText(String.valueOf(user.id));
         nameCell.setText(user.name);
         secondNameCell.setText(user.secondName);
-        ageCell.setText(user.age);
+        ageCell.setText(String.valueOf(user.age));
         emailCell.setText(user.email);
 
         // Code shorter again

@@ -21,7 +21,7 @@
             android:exported="false" />
         <activity
             android:name=".Form"
-            android:exported="false" /> <!-- MainActivity: La actividad principal -->
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -30,7 +30,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Calculator: La actividad de la calculadora -->
+        </activity>
         <activity
             android:name=".Calculator"
             android:exported="true" />
