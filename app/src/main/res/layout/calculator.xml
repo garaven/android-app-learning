@@ -157,6 +157,15 @@
             android:layout_columnWeight="1"
             android:text="/"
             android:textSize="24sp" />
+
+        <!-- Nuevo botón de backspace -->
+        <Button
+            android:id="@+id/backspace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="←"
+            android:textSize="24sp" />
     </GridLayout>
 
 </LinearLayout>
