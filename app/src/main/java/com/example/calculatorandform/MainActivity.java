@@ -54,6 +54,14 @@ public class MainActivity extends AppCompatActivity {
             intentList.putExtra("usersList", users);
             startActivity(intentList);
         });
+
+        Button update = findViewById(R.id.updateOption);
+
+        update.setOnClickListener(x -> {
+            Intent intentUpdate = new Intent(this, UpdateUser.class);
+            intentUpdate.putExtra("usersList", users);
+            updateActivityResultLauncher.launch(intentUpdate);
+        });
     }
 
     private final ActivityResultLauncher<Intent> formActivityResultLauncher = registerForActivityResult(
@@ -71,6 +79,24 @@ public class MainActivity extends AppCompatActivity {
 
                     for (User item : users) {
                         Log.d("Mi app", String.valueOf(item));
+                    }
+                }
+            }
+    );
+
+    private final ActivityResultLauncher<Intent> updateActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), x -> {
+                if (x.getResultCode() == Activity.RESULT_OK) {
+                    // Update the array with the array passed in UpdateUser activity
+                    Intent data = x.getData();
+                    ArrayList<User> updatedUsers = (ArrayList<User>) data.getSerializableExtra("updatedUsersList");
+                    if (updatedUsers != null) {
+                        users.clear();
+                        users.addAll(updatedUsers);
+
+                        for (User item : users) {
+                            Log.d("Mi app", String.valueOf(item));
+                        }
                     }
                 }
             }
