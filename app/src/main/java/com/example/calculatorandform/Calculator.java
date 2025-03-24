@@ -8,7 +8,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Calculator extends AppCompatActivity {
-    Button number1, number2, number3, number4, number5, number6, number7, number8, number9, number0, clear, equal, add, sustraction, product, division;
+    Button number1, number2, number3, number4, number5, number6, number7, number8, number9, number0, clear, equal, add, sustraction, backspace, product, division;
     TextView screen;
 
     String input;
@@ -18,7 +18,7 @@ public class Calculator extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);  // Habilitar la funcionalidad Edge-to-Edge
+        EdgeToEdge.enable(this);
         setContentView(R.layout.calculator);
 
         screen = findViewById(R.id.screen);
@@ -34,6 +34,7 @@ public class Calculator extends AppCompatActivity {
         number0 = findViewById(R.id.number0);
         clear = findViewById(R.id.clear);
         equal = findViewById(R.id.equal);
+        backspace = findViewById(R.id.backspace);
         add = findViewById(R.id.add);
         sustraction = findViewById(R.id.sustraction);
         product = findViewById(R.id.product);
@@ -44,7 +45,6 @@ public class Calculator extends AppCompatActivity {
         first_number = 0.0;
         second_number = 0.0;
 
-        // Events
         number1.setOnClickListener(x -> addToScreen("1"));
         number2.setOnClickListener(x -> addToScreen("2"));
         number3.setOnClickListener(x -> addToScreen("3"));
@@ -63,10 +63,34 @@ public class Calculator extends AppCompatActivity {
 
         clear.setOnClickListener(x -> clear());
         equal.setOnClickListener(x -> calculate());
+
+        backspace.setOnClickListener(x -> {
+            if (!input.isEmpty()) {
+                input = input.substring(0, input.length() - 1);
+                screen.setText(input.isEmpty() ? "0" : input);
+            }
+
+            if (input.isEmpty()) {
+                screen.setText("0");
+                first_number = 0.0;
+                second_number = 0.0;
+            } else {
+                if (operation.isEmpty()) {
+                    first_number = Double.parseDouble(input);
+                } else {
+                    second_number = Double.parseDouble(input);
+                }
+            }
+        });
     }
 
     public void identifyOperation(String op) {
+        if (!input.isEmpty()) {
+            first_number = Double.parseDouble(input);
+        }
         operation = op;
+        input = "";
+        screen.setText("0");
     }
 
     public void clear() {
@@ -79,6 +103,10 @@ public class Calculator extends AppCompatActivity {
 
     public void calculate() {
         result = 0.0;
+
+        if (!input.isEmpty()) {
+            second_number = Double.parseDouble(input);
+        }
 
         switch (operation) {
             case "+":
