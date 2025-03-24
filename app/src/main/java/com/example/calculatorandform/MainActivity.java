@@ -47,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
             Intent intentForm = new Intent(this, Form.class);
             startActivityForResult(intentForm, 500);
         });
+
+        Button list = findViewById(R.id.listButton);
+
+        list.setOnClickListener(x -> {
+            Intent intentList = new Intent(this, UsersTable.class);
+            intentList.putExtra("usersList", users);
+            startActivity(intentList);
+        });
     }
 
     @Override
