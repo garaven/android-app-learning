@@ -2,7 +2,9 @@ package com.example.calculatorandform;
 
 import androidx.annotation.NonNull;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     String name, secondName, email;
     Integer age, id;
 

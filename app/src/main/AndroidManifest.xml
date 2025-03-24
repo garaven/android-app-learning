@@ -14,9 +14,14 @@
         android:theme="@style/Theme.CalculatorAndForm"
         tools:targetApi="31">
         <activity
+            android:name=".UpdateUser"
+            android:exported="false" />
+        <activity
+            android:name=".UsersTable"
+            android:exported="false" />
+        <activity
             android:name=".Form"
             android:exported="true" />
-        <!-- MainActivity: La actividad principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -25,10 +30,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Calculator: La actividad de la calculadora -->
+        </activity>
         <activity
             android:name=".Calculator"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <!-- Botón para abrir la calculadora -->
+
     <Button
         android:id="@+id/calculatorButton"
         android:layout_width="wrap_content"
@@ -18,7 +19,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.371" />
 
     <Button
         android:id="@+id/formButton"
@@ -29,5 +31,14 @@
         android:text="Abrir Formulario"
         app:layout_constraintStart_toStartOf="@+id/calculatorButton"
         app:layout_constraintTop_toBottomOf="@+id/calculatorButton" />
+
+    <Button
+        android:id="@+id/listButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Ver Lista de usuario"
+        app:layout_constraintTop_toBottomOf="@+id/formButton"
+        tools:layout_editor_absoluteX="118dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
