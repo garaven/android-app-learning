@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,110 +8,175 @@
     android:layout_height="match_parent"
     tools:context=".UpdateUser">
 
+    <!-- Título de la pantalla -->
     <TextView
         android:id="@+id/titleUpdateUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="20dp"
         android:text="Actualizar usuario"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/idSearchInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="ID"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleUpdateUser" />
+    <android.widget.ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/titleUpdateUser"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <Button
-        android:id="@+id/searchUserButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Buscar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idSearchInput" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:enabled="false"
-        android:id="@+id/idInputUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="ID"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchUserButton" />
+            <EditText
+                android:id="@+id/idSearchInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="ID"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleUpdateUser" />
 
-    <EditText
-        android:enabled="false"
-        android:id="@+id/nameInputUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Nombre"
-        app:layout_constraintStart_toStartOf="@+id/idInputUpdate"
-        app:layout_constraintTop_toBottomOf="@+id/idInputUpdate" />
+            <Button
+                android:id="@+id/searchUserButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Buscar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idSearchInput" />
 
-    <EditText
-        android:enabled="false"
-        android:id="@+id/secondNameInputUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Apellido"
-        app:layout_constraintStart_toStartOf="@+id/nameInputUpdate"
-        app:layout_constraintTop_toBottomOf="@+id/nameInputUpdate" />
+            <android.widget.RadioGroup
+                android:id="@+id/radioGroupGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/searchUserButton"
+                android:orientation="horizontal">
 
-    <EditText
-        android:enabled="false"
-        android:id="@+id/ageInputUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Edad"
-        app:layout_constraintStart_toStartOf="@+id/secondNameInputUpdate"
-        app:layout_constraintTop_toBottomOf="@+id/secondNameInputUpdate" />
+                <android.widget.RadioButton
+                    android:enabled="false"
+                    android:id="@+id/radioMaleUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Masculino" />
 
-    <EditText
-        android:enabled="false"
-        android:id="@+id/emailInputUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Correo"
-        app:layout_constraintStart_toStartOf="@+id/ageInputUpdate"
-        app:layout_constraintTop_toBottomOf="@+id/ageInputUpdate" />
+                <android.widget.RadioButton
+                    android:enabled="false"
+                    android:id="@+id/radioFemaleUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Femenino" />
+            </android.widget.RadioGroup>
 
-    <Button
-        android:enabled="false"
-        android:id="@+id/updateUserButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
-        android:text="Actualizar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailInputUpdate" />
+            <EditText
+                android:enabled="false"
+                android:id="@+id/idInputUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="ID"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroupGender" />
+
+            <EditText
+                android:enabled="false"
+                android:id="@+id/nameInputUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Nombre"
+                app:layout_constraintStart_toStartOf="@+id/idInputUpdate"
+                app:layout_constraintTop_toBottomOf="@+id/idInputUpdate" />
+
+            <EditText
+                android:enabled="false"
+                android:id="@+id/secondNameInputUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Apellido"
+                app:layout_constraintStart_toStartOf="@+id/nameInputUpdate"
+                app:layout_constraintTop_toBottomOf="@+id/nameInputUpdate" />
+
+            <EditText
+                android:enabled="false"
+                android:id="@+id/ageInputUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Edad"
+                app:layout_constraintStart_toStartOf="@+id/secondNameInputUpdate"
+                app:layout_constraintTop_toBottomOf="@+id/secondNameInputUpdate" />
+
+            <EditText
+                android:enabled="false"
+                android:id="@+id/emailInputUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Correo"
+                app:layout_constraintStart_toStartOf="@+id/ageInputUpdate"
+                app:layout_constraintTop_toBottomOf="@+id/ageInputUpdate" />
+
+            <Spinner
+                android:id="@+id/spinnerDocTypeUpdate"
+                android:layout_width="409dp"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/docNumberInputUpdate"
+                app:layout_constraintTop_toBottomOf="@+id/emailInputUpdate"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <EditText
+                android:id="@+id/docNumberInputUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="120dp"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="text"
+                android:text="Numero de documento"
+                app:layout_constraintStart_toStartOf="@+id/ageInputUpdate"
+                app:layout_constraintTop_toBottomOf="@+id/ageInputUpdate" />
+
+            <Button
+                android:id="@+id/updateUserButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="172dp"
+                android:enabled="false"
+                android:text="Actualizar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailInputUpdate" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </android.widget.ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
