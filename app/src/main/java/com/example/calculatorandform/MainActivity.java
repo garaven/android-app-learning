@@ -18,8 +18,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    String name, secondName, email;
+    String name, secondName, email, docType, gender;
     Integer age, id;
+    Long docNumber;
     ArrayList<User> users = new ArrayList<>();
 
     @Override
@@ -72,9 +73,13 @@ public class MainActivity extends AppCompatActivity {
                     secondName = data.getStringExtra("apellido");
                     email = data.getStringExtra("correo");
                     age = Integer.parseInt(data.getStringExtra("edad"));
+                    docNumber = Long.parseLong(data.getStringExtra("numero-documento"));
+                    docType = data.getStringExtra("tipo-documento");
+                    gender = data.getStringExtra("genero");
                     id = 1 + users.size();
 
-                    User newUser = new User(name, secondName, email, age, id);
+                    // Importa el orden, mire el constructor de la clase
+                    User newUser = new User(name, secondName, email, docType, gender, age, id, docNumber);
                     users.add(newUser);
 
                     for (User item : users) {
