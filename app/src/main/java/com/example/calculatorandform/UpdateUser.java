@@ -295,7 +295,7 @@ public class UpdateUser extends AppCompatActivity {
         if (checkboxCycling.isChecked()) sb.append("Ciclismo,");
         return sb.length() > 0 ? sb.substring(0, sb.length()-1) : "";
 
-        
+
     }
 
     private void returnResult(ArrayList<User> users) {

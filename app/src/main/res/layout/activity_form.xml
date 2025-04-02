@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".Form">
 
-    <android.widget.ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -21,58 +21,81 @@
             <!-- Título -->
             <TextView
                 android:id="@+id/titleText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Formulario de Registro"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:layout_marginBottom="24dp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Datos Personales Section -->
+            <TextView
+                android:id="@+id/sectionPersonalData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Datos Personales"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/titleText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Género -->
             <TextView
                 android:id="@+id/labelGender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
+                android:layout_marginTop="16dp"
                 android:text="Género"
-                app:layout_constraintTop_toBottomOf="@+id/titleText"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/sectionPersonalData"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <RadioGroup
                 android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                app:layout_constraintTop_toBottomOf="@+id/titleText"
-                app:layout_constraintStart_toEndOf="@+id/labelGender">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/labelGender"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <RadioButton
                     android:id="@+id/radioMale"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Masculino" />
 
                 <RadioButton
                     android:id="@+id/radioFemale"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Femenino" />
             </RadioGroup>
 
             <!-- Tipo de documento -->
             <TextView
                 android:id="@+id/labelDocType"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="16dp"
                 android:text="Tipo de documento"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/radioGroup"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Spinner
                 android:id="@+id/spinnerDocType"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/labelDocType"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,80 +106,89 @@
                 android:id="@+id/labelDocNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="16dp"
                 android:text="Número del documento"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerDocType"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/inputDocNumber"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:inputType="number"
+                android:maxLines="1"
                 app:layout_constraintTop_toBottomOf="@+id/labelDocNumber"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Nombres -->
             <TextView
                 android:id="@+id/labelName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="16dp"
                 android:text="Nombres"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/inputDocNumber"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/nameInput"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:ems="10"
-                android:inputType="text"
+                android:inputType="textPersonName"
+                android:maxLines="1"
                 app:layout_constraintTop_toBottomOf="@+id/labelName"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Apellidos -->
             <TextView
                 android:id="@+id/labelLastname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="16dp"
                 android:text="Apellidos"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/nameInput"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/secondNameInput"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="11dp"
-                android:ems="10"
-                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:inputType="textPersonName"
+                android:maxLines="1"
                 app:layout_constraintTop_toBottomOf="@+id/labelLastname"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Edad -->
             <TextView
                 android:id="@+id/labelAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="16dp"
                 android:text="Edad"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/secondNameInput"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/ageInput"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:ems="10"
-                android:inputType="text"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
                 app:layout_constraintTop_toBottomOf="@+id/labelAge"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Correo -->
             <TextView
@@ -164,27 +196,52 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Correo"
+                android:text="Correo electrónico"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/ageInput"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/emailInput"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:ems="10"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
                 app:layout_constraintTop_toBottomOf="@+id/labelEmail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Nivel de Estudios - Añadido el label -->
+            <TextView
+                android:id="@+id/labelEducation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Nivel de Estudios"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/emailInput"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <!-- Spinner para Nivel de Estudios (sin android:entries) -->
             <Spinner
                 android:id="@+id/spinnerEducationLevel"
                 android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/labelEducation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Sección de Preferencias -->
+            <TextView
+                android:id="@+id/sectionPreferences"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/emailInput"
+                android:layout_marginTop="24dp"
+                android:text="Preferencias"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerEducationLevel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -194,54 +251,73 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Gusto Musical"
+                android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerEducationLevel"
+                app:layout_constraintTop_toBottomOf="@+id/sectionPreferences"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <LinearLayout
                 android:id="@+id/checkboxesMusic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/labelMusicTaste"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <CheckBox
-                    android:id="@+id/checkboxRock"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rock" />
+                    android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/checkboxPop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pop" />
+                    <CheckBox
+                        android:id="@+id/checkboxRock"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Rock" />
 
-                <CheckBox
-                    android:id="@+id/checkboxRap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rap" />
+                    <CheckBox
+                        android:id="@+id/checkboxPop"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pop" />
 
-                <CheckBox
-                    android:id="@+id/checkboxJazz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jazz" />
+                    <CheckBox
+                        android:id="@+id/checkboxRap"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Rap" />
+                </LinearLayout>
 
-                <CheckBox
-                    android:id="@+id/checkboxClassical"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Clásica" />
+                    android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/checkboxOther"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Otra" />
+                    <CheckBox
+                        android:id="@+id/checkboxJazz"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Jazz" />
+
+                    <CheckBox
+                        android:id="@+id/checkboxClassical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Clásica" />
+
+                    <CheckBox
+                        android:id="@+id/checkboxOther"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Regueton" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Sección de Deportes -->
@@ -250,6 +326,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Deportes"
+                android:textStyle="bold"
                 android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/checkboxesMusic"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -258,61 +335,82 @@
                 android:id="@+id/checkboxesSports"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/labelSports"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <CheckBox
-                    android:id="@+id/checkboxFootball"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Fútbol" />
+                    android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/checkboxBasketball"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Baloncesto" />
+                    <CheckBox
+                        android:id="@+id/checkboxFootball"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fútbol" />
 
-                <CheckBox
-                    android:id="@+id/checkboxTennis"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tenis" />
+                    <CheckBox
+                        android:id="@+id/checkboxBasketball"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Baloncesto" />
 
-                <CheckBox
-                    android:id="@+id/checkboxRunning"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Correr" />
+                    <CheckBox
+                        android:id="@+id/checkboxTennis"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tenis" />
+                </LinearLayout>
 
-                <CheckBox
-                    android:id="@+id/checkboxSwimming"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Natación" />
+                    android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/checkboxCycling"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ciclismo" />
+                    <CheckBox
+                        android:id="@+id/checkboxRunning"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Correr" />
+
+                    <CheckBox
+                        android:id="@+id/checkboxSwimming"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Natación" />
+
+                    <CheckBox
+                        android:id="@+id/checkboxCycling"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ciclismo" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Botón de Registro -->
             <Button
                 android:id="@+id/registerButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:padding="12dp"
                 android:text="Registrar"
+                android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/checkboxesSports"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </android.widget.ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
