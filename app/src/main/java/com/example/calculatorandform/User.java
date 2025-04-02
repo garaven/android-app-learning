@@ -1,27 +1,30 @@
 package com.example.calculatorandform;
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
 
 public class User implements Serializable {
-    String name, secondName, email, docType, gender;
+    String name, secondName, email, docType, gender, educationLevel, musicalTastes, sports;
     Integer age, id;
     Long docNumber;
 
-    public User(String name, String secondName, String email, String docType, String gender, Integer age, Integer id, Long docNumber) {
+    // Updated constructor to include all fields
+    public User(String name, String secondName, String email, String docType, String gender,
+                Integer age, Integer id, Long docNumber, String educationLevel,
+                String musicalTastes, String sports) {
         this.name = name;
         this.secondName = secondName;
         this.email = email;
+        this.docType = docType;
+        this.gender = gender;
         this.age = age;
         this.id = id;
         this.docNumber = docNumber;
-        this.docType = docType;
-        this.gender = gender;
+        this.educationLevel = educationLevel;
+        this.musicalTastes = musicalTastes;
+        this.sports = sports;
     }
 
-    // Set
-
+    // Setters
     public void setName(String name) {
         this.name = name;
     }
@@ -34,6 +37,14 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public void setAge(Integer age) {
         this.age = age;
     }
@@ -42,16 +53,19 @@ public class User implements Serializable {
         this.docNumber = docNumber;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setEducationLevel(String educationLevel) {
+        this.educationLevel = educationLevel;
     }
 
-    public void setDocType(String docType) {
-        this.docType = docType;
+    public void setMusicalTastes(String musicalTastes) {
+        this.musicalTastes = musicalTastes;
     }
 
-    // Get
+    public void setSports(String sports) {
+        this.sports = sports;
+    }
 
+    // Getters
     public String getName() {
         return name;
     }
@@ -62,6 +76,14 @@ public class User implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getDocType() {
+        return docType;
+    }
+
+    public String getGender() {
+        return gender;
     }
 
     public Integer getAge() {
@@ -76,11 +98,15 @@ public class User implements Serializable {
         return docNumber;
     }
 
-    public String getDocType() {
-        return docType;
+    public String getEducationLevel() {
+        return educationLevel;
     }
 
-    public String getGender() {
-        return gender;
+    public String getMusicalTastes() {
+        return musicalTastes;
+    }
+
+    public String getSports() {
+        return sports;
     }
 }
