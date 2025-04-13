@@ -24,148 +24,185 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="4"
+        android:rowCount="5"
+        android:useDefaultMargins="true"
         android:orientation="horizontal">
 
         <!-- Fila de números -->
         <Button
             android:id="@+id/number1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
+            android:layout_height="70dp"
+            android:layout_columnWeight="1.5"
+            android:layout_margin="3dp"
             android:text="1"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/number2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
+            android:layout_height="70dp"
+            android:layout_columnWeight="1.5"
+            android:layout_margin="3dp"
             android:text="2"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/number3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_columnWeight="1"
+            android:layout_margin="3dp"
             android:text="3"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/add"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_columnWeight="1"
+            android:layout_margin="3dp"
             android:text="+"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:backgroundTint="#FF9500" />
 
         <!-- Segunda fila de números -->
         <Button
             android:id="@+id/number4"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
+            android:layout_height="70dp"
+            android:layout_columnWeight="1.5"
+            android:layout_margin="3dp"
             android:text="4"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/number5"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
+            android:layout_height="70dp"
+            android:layout_columnWeight="1.5"
+            android:layout_margin="3dp"
             android:text="5"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/number6"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_columnWeight="1"
+            android:layout_margin="3dp"
             android:text="6"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/sustraction"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_columnWeight="1"
+            android:layout_margin="3dp"
             android:text="-"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:backgroundTint="#FF9500" />
 
         <!-- Tercera fila de números -->
         <Button
             android:id="@+id/number7"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
+            android:layout_height="70dp"
+            android:layout_columnWeight="1.5"
+            android:layout_margin="3dp"
             android:text="7"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/number8"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
+            android:layout_height="70dp"
+            android:layout_columnWeight="1.5"
+            android:layout_margin="3dp"
             android:text="8"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/number9"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_columnWeight="1"
+            android:layout_margin="3dp"
             android:text="9"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/product"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_columnWeight="1"
-            android:text="*"
+            android:layout_margin="3dp"
+            android:text="×"
+            android:textSize="24sp"
+            android:backgroundTint="#FF9500" />
+
+        <!-- Cuarta fila: botón decimal, 0, clear, división -->
+        <Button
+            android:id="@+id/decimal"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_columnWeight="1.5"
+            android:layout_margin="3dp"
+            android:text="."
             android:textSize="24sp" />
 
-        <!-- Cuarta fila de botones -->
         <Button
             android:id="@+id/number0"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="2"
+            android:layout_height="70dp"
+            android:layout_columnWeight="1.5"
+            android:layout_margin="3dp"
             android:text="0"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/clear"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_columnWeight="1"
+            android:layout_margin="3dp"
             android:text="C"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/equal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="="
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:backgroundTint="#A9A9A9" />
 
         <Button
             android:id="@+id/division"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_columnWeight="1"
-            android:text="/"
-            android:textSize="24sp" />
+            android:layout_margin="3dp"
+            android:text="÷"
+            android:textSize="24sp"
+            android:backgroundTint="#FF9500" />
 
-        <!-- Nuevo botón de backspace -->
+        <!-- Quinta fila: botón backspace y igual -->
         <Button
             android:id="@+id/backspace"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
+            android:layout_height="70dp"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="3"
+            android:layout_margin="3dp"
             android:text="←"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:backgroundTint="#A9A9A9" />
+
+        <Button
+            android:id="@+id/equal"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="2"
+            android:layout_margin="3dp"
+            android:text="="
+            android:textSize="24sp"
+            android:backgroundTint="#007AFF" />
     </GridLayout>
 
 </LinearLayout>
