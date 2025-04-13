@@ -23,7 +23,6 @@ public class Calculator extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.calculator);
 
-        // Inicializar los elementos de la UI
         screen = findViewById(R.id.screen);
         number1 = findViewById(R.id.number1);
         number2 = findViewById(R.id.number2);
@@ -42,11 +41,10 @@ public class Calculator extends AppCompatActivity {
         sustraction = findViewById(R.id.sustraction);
         product = findViewById(R.id.product);
         division = findViewById(R.id.division);
-        decimal = findViewById(R.id.decimal); // Nuevo botón para el punto decimal
+        decimal = findViewById(R.id.decimal);
 
         resetCalculator();
 
-        // Configurar listeners para los botones numéricos
         number1.setOnClickListener(x -> addToScreen("1"));
         number2.setOnClickListener(x -> addToScreen("2"));
         number3.setOnClickListener(x -> addToScreen("3"));
@@ -59,13 +57,11 @@ public class Calculator extends AppCompatActivity {
         number0.setOnClickListener(x -> addToScreen("0"));
         decimal.setOnClickListener(x -> addDecimal());
 
-        // Configurar listeners para los botones de operación
         add.setOnClickListener(x -> identifyOperation("+"));
         sustraction.setOnClickListener(x -> identifyOperation("-"));
         product.setOnClickListener(x -> identifyOperation("*"));
         division.setOnClickListener(x -> identifyOperation("/"));
 
-        // Configurar listeners para los botones de control
         clear.setOnClickListener(x -> resetCalculator());
         equal.setOnClickListener(x -> calculate());
         backspace.setOnClickListener(x -> handleBackspace());
@@ -81,16 +77,13 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void identifyOperation(String op) {
-        // Si hay una operación previa pendiente, calcular primero
         if (!operation.isEmpty() && !input.isEmpty()) {
             calculate();
         }
 
-        // Si hay un valor en pantalla, guardarlo como primer número
         if (!input.isEmpty()) {
             first_number = Double.parseDouble(input);
         } else if (result != null) {
-            // Si no hay input pero hay un resultado previo, usarlo
             first_number = result;
         }
 
@@ -112,11 +105,11 @@ public class Calculator extends AppCompatActivity {
 
     public void calculate() {
         if (operation.isEmpty()) {
-            return; // No hay operación para calcular
+            return;
         }
 
         if (input.isEmpty()) {
-            second_number = first_number; // Si no hay segundo número, usar el primero
+            second_number = first_number;
         } else {
             second_number = Double.parseDouble(input);
         }
@@ -142,7 +135,6 @@ public class Calculator extends AppCompatActivity {
                     break;
             }
 
-            // Formatear resultado para eliminar .0 si es entero
             String resultText;
             if (result == Math.floor(result)) {
                 resultText = String.format("%.0f", result);
@@ -163,13 +155,11 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void addToScreen(String number) {
-        // Si empezamos una nueva operación, limpiar el input
         if (isNewOperation) {
             input = "";
             isNewOperation = false;
         }
 
-        // Prevenir múltiples ceros iniciales
         if (input.equals("0") && number.equals("0")) {
             return;
         }
@@ -185,15 +175,12 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void addDecimal() {
-        // Si empezamos una nueva operación, empezar con "0."
         if (isNewOperation) {
             input = "0";
             isNewOperation = false;
         }
 
-        // No añadir punto si ya existe uno
         if (!input.contains(".")) {
-            // Si el input está vacío, añadir un cero antes del punto
             if (input.isEmpty()) {
                 input = "0";
             }

@@ -6,7 +6,6 @@
     android:padding="16dp"
     android:gravity="center">
 
-    <!-- Pantalla donde se muestran los números y resultados -->
     <TextView
         android:id="@+id/screen"
         android:layout_width="match_parent"
@@ -19,7 +18,6 @@
         android:textColor="#000000"
         android:layout_marginBottom="16dp" />
 
-    <!-- Fila de botones -->
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +26,6 @@
         android:useDefaultMargins="true"
         android:orientation="horizontal">
 
-        <!-- Fila de números -->
         <Button
             android:id="@+id/number1"
             android:layout_width="0dp"
@@ -66,7 +63,6 @@
             android:textSize="24sp"
             android:backgroundTint="#FF9500" />
 
-        <!-- Segunda fila de números -->
         <Button
             android:id="@+id/number4"
             android:layout_width="0dp"
@@ -104,7 +100,6 @@
             android:textSize="24sp"
             android:backgroundTint="#FF9500" />
 
-        <!-- Tercera fila de números -->
         <Button
             android:id="@+id/number7"
             android:layout_width="0dp"
@@ -142,7 +137,6 @@
             android:textSize="24sp"
             android:backgroundTint="#FF9500" />
 
-        <!-- Cuarta fila: botón decimal, 0, clear, división -->
         <Button
             android:id="@+id/decimal"
             android:layout_width="0dp"
@@ -181,7 +175,6 @@
             android:textSize="24sp"
             android:backgroundTint="#FF9500" />
 
-        <!-- Quinta fila: botón backspace y igual -->
         <Button
             android:id="@+id/backspace"
             android:layout_width="0dp"
