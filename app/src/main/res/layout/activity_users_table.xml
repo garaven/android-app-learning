@@ -64,14 +64,6 @@
                     android:background="#FFC107"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="Apellido" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:background="#FFC107"
-                    android:gravity="center"
-                    android:padding="8dp"
                     android:text="Edad" />
 
                 <TextView
@@ -81,6 +73,14 @@
                     android:gravity="center"
                     android:padding="8dp"
                     android:text="Correo" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="#FFC107"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Creado por" />
 
             </TableRow>
         </TableLayout>

@@ -41,21 +41,21 @@ public class UsersTable extends AppCompatActivity {
         TableRow row = new TableRow(this);
         TextView idCell = new TextView(this);
         TextView nameCell = new TextView(this);
-        TextView secondNameCell = new TextView(this);
         TextView ageCell = new TextView(this);
         TextView emailCell = new TextView(this);
+        TextView createdByCell = new TextView(this);
 
         // Making shorter the code jeje
-        TextView cells[] = {idCell, nameCell, secondNameCell, ageCell, emailCell};
+        TextView cells[] = {idCell, nameCell, ageCell, emailCell, createdByCell};
         for (TextView cell : cells) {
             cell.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         }
 
         idCell.setText(String.valueOf(user.id));
         nameCell.setText(user.name);
-        secondNameCell.setText(user.secondName);
         ageCell.setText(String.valueOf(user.age));
         emailCell.setText(user.email);
+        createdByCell.setText(user.createdBy);
 
         // Code shorter again
         for (TextView cell : cells) {

@@ -3,14 +3,14 @@ package com.example.calculatorandform;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    String name, secondName, email, docType, gender, educationLevel, musicalTastes, sports;
+    String name, secondName, email, docType, gender, educationLevel, musicalTastes, sports, createdBy;
     Integer age, id;
     Long docNumber;
 
     // Updated constructor to include all fields
     public User(String name, String secondName, String email, String docType, String gender,
                 Integer age, Integer id, Long docNumber, String educationLevel,
-                String musicalTastes, String sports) {
+                String musicalTastes, String sports, String createdBy) {
         this.name = name;
         this.secondName = secondName;
         this.email = email;
@@ -22,6 +22,7 @@ public class User implements Serializable {
         this.educationLevel = educationLevel;
         this.musicalTastes = musicalTastes;
         this.sports = sports;
+        this.createdBy = createdBy;
     }
 
     // Setters
@@ -63,6 +64,10 @@ public class User implements Serializable {
 
     public void setSports(String sports) {
         this.sports = sports;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     // Getters
@@ -108,5 +113,9 @@ public class User implements Serializable {
 
     public String getSports() {
         return sports;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
     }
 }
