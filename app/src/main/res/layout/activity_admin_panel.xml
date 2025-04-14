@@ -5,52 +5,108 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="32dp"
+    android:background="@android:color/white"
     tools:context=".adminPanel">
 
     <TextView
         android:id="@+id/adminPanelTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="48dp"
         android:text="Panel de administración"
+        android:textSize="28sp"
+        android:textColor="#333333"
+        android:fontFamily="sans-serif-light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/adminUpdateButton"
+    <TextView
+        android:id="@+id/adminPanelSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="287dp"
-        android:text="Actualizar usuario"
+        android:layout_marginTop="8dp"
+        android:text="Gestión de usuarios"
+        android:textSize="16sp"
+        android:textColor="#757575"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/adminPanelTitle" />
 
-    <Button
-        android:id="@+id/adminListButton"
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="#E0E0E0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adminPanelSubtitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/adminCreateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="CREAR USUARIO"
+                android:textSize="14sp"
+                app:cornerRadius="24dp"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/adminListButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="LISTA DE USUARIOS"
+                android:textSize="14sp"
+                app:cornerRadius="24dp"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/adminUpdateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="ACTUALIZAR USUARIO"
+                android:textSize="14sp"
+                app:cornerRadius="24dp"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/adminDeleteButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="ELIMINAR USUARIO"
+                android:textSize="14sp"
+                app:cornerRadius="24dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="Lista de usuarios"
-        app:layout_constraintBottom_toTopOf="@+id/adminUpdateButton"
-        app:layout_constraintStart_toStartOf="@+id/adminUpdateButton" />
+        android:text="© 2025"
+        android:textSize="12sp"
+        android:textColor="#9E9E9E"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/adminCreateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="Crear usuario"
-        app:layout_constraintBottom_toTopOf="@+id/adminListButton"
-        app:layout_constraintStart_toStartOf="@+id/adminListButton" />
-
-    <Button
-        android:id="@+id/adminDeleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Eliminar usuario"
-        app:layout_constraintStart_toStartOf="@+id/adminUpdateButton"
-        app:layout_constraintTop_toBottomOf="@+id/adminUpdateButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
