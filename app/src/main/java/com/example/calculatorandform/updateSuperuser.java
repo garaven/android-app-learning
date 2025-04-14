@@ -59,6 +59,8 @@ public class updateSuperuser extends AppCompatActivity {
             userInput.setText(superuserSearched.getUsername());
             passwordInput.setText(superuserSearched.getPassword());
             updateButton.setEnabled(true);
+            userInput.setEnabled(true);
+            passwordInput.setEnabled(true);
         } else {
             Toast.makeText(this, "Superusuario no encontrado", Toast.LENGTH_SHORT).show();
             updateButton.setEnabled(false);
@@ -76,12 +78,17 @@ public class updateSuperuser extends AppCompatActivity {
 
     private void handleUpdateSuperuser(ArrayList<Superuser> superusers) {
         if (superuserSearched != null) {
-            superuserSearched.setUsername(userInput.getText().toString());
-            superuserSearched.setPassword(passwordInput.getText().toString());
+            String updatedUsername = userInput.getText().toString().toLowerCase();
+            String updatedPassword = passwordInput.getText().toString();
+            superuserSearched.setUsername(updatedUsername);
+            superuserSearched.setPassword(updatedPassword);
 
             Intent resultIntent = new Intent();
             resultIntent.putExtra("updatedSuperusersList", superusers);
             setResult(RESULT_OK, resultIntent);
+            Toast.makeText(this, "Superusuario actualizado:\n" +
+                    "Username: " + updatedUsername + "\n" +
+                    "Contraseña: " + updatedPassword, Toast.LENGTH_LONG).show();
             finish();
         } else {
             Toast.makeText(this, "Primero busque un superusuario", Toast.LENGTH_SHORT).show();

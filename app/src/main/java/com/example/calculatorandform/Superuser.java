@@ -1,6 +1,8 @@
 package com.example.calculatorandform;
 
-public class Superuser {
+import java.io.Serializable;
+
+public class Superuser implements Serializable {
     String username;
     String password;
 

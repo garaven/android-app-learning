@@ -37,6 +37,7 @@ public class adminPanel extends AppCompatActivity {
 
         create.setOnClickListener(x -> {
             Intent intentCreate = new Intent(this, createSuperuser.class);
+            intentCreate.putExtra("superusers", superusers);
             createUserActivityResultLauncher.launch(intentCreate);
         });
 
@@ -118,7 +119,6 @@ public class adminPanel extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         Intent resultIntent = new Intent();
         resultIntent.putExtra("updatedSuperusers", superusers);
         setResult(Activity.RESULT_OK, resultIntent);

@@ -35,7 +35,7 @@ public class deleteSuperuser extends AppCompatActivity {
             return insets;
         });
 
-        usernameInput = findViewById(R.id.deleteUsuarioInput);
+        usernameInput = findViewById(R.id.createUsuarioInput);
         deleteButton = findViewById(R.id.deleteUsuarioButton);
 
         // Recibe la lista desde adminPanel
