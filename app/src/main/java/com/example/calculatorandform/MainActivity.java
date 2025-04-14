@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    String name, secondName, email, docType, gender, educationLevel, musicalTastes, sports;
+    String name, secondName, email, docType, gender, educationLevel, musicalTastes, sports, username;
     Integer age, id;
     Long docNumber;
     ArrayList<User> users = new ArrayList<>();
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        username = getIntent().getStringExtra("superuser");
+        Toast.makeText(this, "Bienvenido, " + username, Toast.LENGTH_LONG).show();
+
         Button calculator = findViewById(R.id.calculatorButton);
 
         calculator.setOnClickListener(x -> {
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         form.setOnClickListener(x -> {
             Intent intentForm = new Intent(this, Form.class);
+            intentForm.putExtra("superuser", username);
             formActivityResultLauncher.launch(intentForm);
         });
 
@@ -82,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     id = 1 + users.size();
 
                     // Importa el orden, mire el constructor de la clase
-                    User newUser = new User(name, secondName, email, docType, gender, age, id, docNumber, educationLevel, musicalTastes, sports);
+                    User newUser = new User(name, secondName, email, docType, gender, age, id, docNumber, educationLevel, musicalTastes, sports, username);
                     users.add(newUser);
 
                     for (User item : users) {
