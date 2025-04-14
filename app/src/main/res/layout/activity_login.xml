@@ -1,36 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:orientation="vertical"
-    android:padding="24dp"
+    android:padding="32dp"
     android:gravity="center"
+    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/superUsernameInput"
-        android:hint="Usuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/superPasswordInput"
-        android:hint="Contraseña"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/superLoginButton"
-        android:text="Ingresar"
+    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Iniciar Sesión"
+        android:textSize="28sp"
+        android:textColor="#333333"
+        android:fontFamily="sans-serif-light"
+        android:layout_marginBottom="60dp" />
 
-    <Button
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:boxCornerRadiusBottomEnd="24dp"
+        app:boxCornerRadiusBottomStart="24dp"
+        app:boxCornerRadiusTopEnd="24dp"
+        app:boxCornerRadiusTopStart="24dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/superUsernameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Usuario"
+            android:inputType="textPersonName"
+            android:padding="16dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:boxCornerRadiusBottomEnd="24dp"
+        app:boxCornerRadiusBottomStart="24dp"
+        app:boxCornerRadiusTopEnd="24dp"
+        app:boxCornerRadiusTopStart="24dp"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/superPasswordInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:padding="16dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/superLoginButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="INGRESAR"
+        android:textSize="14sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_marginBottom="20dp"
+        app:cornerRadius="24dp" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/adminPanelButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Admin panel" />
+        android:text="ADMINISTRADOR"
+        android:textSize="14sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:cornerRadius="24dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
 </LinearLayout>
