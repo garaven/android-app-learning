@@ -92,6 +92,11 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void handleBackspace() {
+        if (isNewOperation && result != null) {
+            input = screen.getText().toString();
+            isNewOperation = false;
+        }
+
         if (!input.isEmpty()) {
             input = input.substring(0, input.length() - 1);
 
