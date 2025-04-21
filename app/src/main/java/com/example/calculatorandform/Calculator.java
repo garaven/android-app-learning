@@ -16,6 +16,7 @@ public class Calculator extends AppCompatActivity {
     String operation;
     Double result, first_number, second_number;
     boolean isNewOperation;
+    boolean operationJustPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +74,17 @@ public class Calculator extends AppCompatActivity {
         first_number = 0.0;
         second_number = 0.0;
         isNewOperation = true;
+        operationJustPressed = false;
+        result = null;
         screen.setText("0");
     }
 
     public void identifyOperation(String op) {
+        if (operationJustPressed) {
+            operation = op;
+            return;
+        }
+
         if (!operation.isEmpty() && !input.isEmpty()) {
             calculate();
         }
@@ -89,6 +97,7 @@ public class Calculator extends AppCompatActivity {
 
         operation = op;
         isNewOperation = true;
+        operationJustPressed = true;
     }
 
     public void handleBackspace() {
@@ -152,6 +161,7 @@ public class Calculator extends AppCompatActivity {
             input = "";
             operation = "";
             isNewOperation = true;
+            operationJustPressed = false;
 
         } catch (Exception e) {
             screen.setText("Error");
@@ -165,11 +175,12 @@ public class Calculator extends AppCompatActivity {
             isNewOperation = false;
         }
 
+        operationJustPressed = false;
+
         if (input.equals("0") && number.equals("0")) {
             return;
         }
 
-        // Reemplazar un cero inicial
         if (input.equals("0") && !number.equals(".")) {
             input = number;
         } else {
@@ -180,6 +191,8 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void addDecimal() {
+        operationJustPressed = false;
+
         if (isNewOperation) {
             input = "0";
             isNewOperation = false;
