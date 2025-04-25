@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameInput, passwordInput;
     Button login, adminPanel;
     SQLiteOpenHelper adminDB;
-    ArrayList<Superuser> superusers = new ArrayList<>();
+    ArrayList<Superuser> superusersL = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -56,7 +56,10 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            @SuppressLint("Range") String passwordObtained = cursor.getString(cursor.getColumnIndex("password"));
+            String passwordObtained = "";
+            if (cursor != null && cursor.moveToFirst()) {
+                passwordObtained = cursor.getString(0);
+            }
 
             if (!password.equals(passwordObtained)) {
                 Toast.makeText(this, "Credenciales incorrectas, intentalo de nuevo.", Toast.LENGTH_SHORT).show();
@@ -75,28 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
         adminPanel.setOnClickListener(x -> {
             Intent intentAdmin = new Intent(this, adminPanel.class);
-            intentAdmin.putExtra("superusers", superusers);
-            adminActivityResultLauncher.launch(intentAdmin);
+            startActivity(intentAdmin);
         });
     }
-
-    private final ActivityResultLauncher<Intent> adminActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    // Obtener la lista de superusuarios devuelta
-                    Intent data = result.getData();
-                    if (data != null) {
-                        ArrayList<Superuser> updatedSuperusers = (ArrayList<Superuser>) data.getSerializableExtra("updatedSuperusers");
-                        if (updatedSuperusers != null) {
-                            superusers.clear();
-                            superusers.addAll(updatedSuperusers);
-
-                            for (Superuser item : superusers) {
-                                Log.d("Mi app", "Superuser: " + item);
-                            }
-                        }
-                    }
-                }
-            }
-    );
 }
