@@ -23,7 +23,6 @@ public class createSuperuser extends AppCompatActivity {
     EditText usernameInput, passwordInput;
     Button create;
     AdminSQLiteOpenHelper admin;
-    ArrayList<Superuser> existingUsers = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
