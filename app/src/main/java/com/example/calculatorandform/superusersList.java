@@ -1,9 +1,12 @@
 package com.example.calculatorandform;
 
 import android.annotation.SuppressLint;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,11 +15,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class superusersList extends AppCompatActivity {
 
     ListView listaUsuarios;
-    ArrayList<Superuser> superusersList;
+    AdminSQLiteOpenHelper admin;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -32,17 +36,33 @@ public class superusersList extends AppCompatActivity {
         });
 
         listaUsuarios = findViewById(R.id.listaUsuarios);
-        superusersList = (ArrayList<Superuser>) getIntent().getSerializableExtra("superusers");
 
-        if (superusersList != null) {
+        admin = new AdminSQLiteOpenHelper(this, "login", null, 1);
 
-            ArrayAdapter<Superuser> adapter = new ArrayAdapter<>(
+        SQLiteDatabase dbRead = admin.getReadableDatabase();
+        Cursor cursor = dbRead.rawQuery("SELECT username FROM superusers", null);
+        List<String> superusersList = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                String username = cursor.getString(0);
+                superusersList.add(username);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        dbRead.close();
+
+        if (!superusersList.isEmpty()) {
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this,
                     android.R.layout.simple_list_item_1,
                     superusersList
             );
 
             listaUsuarios.setAdapter(adapter);
+        } else {
+            Toast.makeText(this, "No hay superusuarios", Toast.LENGTH_SHORT).show();
         }
     }
 }
