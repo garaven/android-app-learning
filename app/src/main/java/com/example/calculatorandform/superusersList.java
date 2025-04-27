@@ -37,7 +37,7 @@ public class superusersList extends AppCompatActivity {
 
         listaUsuarios = findViewById(R.id.listaUsuarios);
 
-        admin = new AdminSQLiteOpenHelper(this, "login", null, 1);
+        admin = AdminSQLiteOpenHelper.getInstance(this);
 
         SQLiteDatabase dbRead = admin.getReadableDatabase();
         Cursor cursor = dbRead.rawQuery("SELECT username FROM superusers", null);

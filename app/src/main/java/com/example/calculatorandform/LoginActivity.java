@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.superLoginButton);
         adminPanel = findViewById(R.id.adminPanelButton);
 
-        adminDB = new AdminSQLiteOpenHelper(this, "login", null, 1);
+        adminDB = AdminSQLiteOpenHelper.getInstance(this);
 
         login.setOnClickListener(x -> {
             String username = usernameInput.getText().toString();
@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Credenciales incorrectas, intentalo de nuevo.", Toast.LENGTH_SHORT).show();
                 return;
             }
-            //
 
             cursor.close();
             dbRead.close();

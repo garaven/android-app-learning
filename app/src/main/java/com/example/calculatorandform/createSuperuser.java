@@ -41,7 +41,7 @@ public class createSuperuser extends AppCompatActivity {
         passwordInput = findViewById(R.id.contrasenaInput);
         create = findViewById(R.id.crearButton);
 
-        admin = new AdminSQLiteOpenHelper(this, "login", null, 1);
+        admin = AdminSQLiteOpenHelper.getInstance(this);
 
         create.setOnClickListener(x -> {
             String username = usernameInput.getText().toString();

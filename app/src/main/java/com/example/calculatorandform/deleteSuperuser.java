@@ -39,7 +39,7 @@ public class deleteSuperuser extends AppCompatActivity {
         usernameInput = findViewById(R.id.createUsuarioInput);
         deleteButton = findViewById(R.id.deleteUsuarioButton);
 
-        admin = new AdminSQLiteOpenHelper(this, "login", null, 1);
+        admin = AdminSQLiteOpenHelper.getInstance(this);
 
         deleteButton.setOnClickListener(v -> handleDeleteUser());
     }

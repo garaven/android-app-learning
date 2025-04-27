@@ -1,10 +1,13 @@
 package com.example.calculatorandform;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,11 +15,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
-
 public class UsersTable extends AppCompatActivity {
 
-    TableLayout usersTable;
+    private TableLayout usersTable;
+    private AdminSQLiteOpenHelper dbHelper;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,37 +34,71 @@ public class UsersTable extends AppCompatActivity {
 
         usersTable = findViewById(R.id.usersTable);
 
-        ArrayList<User> users = (ArrayList<User>) getIntent().getSerializableExtra("usersList");
-        for (User user : users) {
-            addRow(user);
+        dbHelper = AdminSQLiteOpenHelper.getInstance(this);
+        db = dbHelper.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                "users",
+                new String[]{ "id", "name", "age", "email", "createdBy" },
+                null, null, null, null, "id ASC"
+        );
+
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext()) {
+                    int id        = cursor.getInt(0);
+                    String name   = cursor.getString(1);
+                    int age       = cursor.getInt(2);
+                    String email  = cursor.getString(3);
+                    String by     = cursor.getString(4);
+                    addRow(id, name, age, email, by);
+                }
+            } finally {
+                cursor.close();
+            }
+        } else {
+            Toast.makeText(this, "No hay usuarios para mostrar", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void addRow(User user) {
+    private void addRow(int id, String name, int age, String email, String createdBy) {
         TableRow row = new TableRow(this);
-        TextView idCell = new TextView(this);
-        TextView nameCell = new TextView(this);
-        TextView ageCell = new TextView(this);
-        TextView emailCell = new TextView(this);
-        TextView createdByCell = new TextView(this);
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
+        );
 
-        // Making shorter the code jeje
-        TextView cells[] = {idCell, nameCell, ageCell, emailCell, createdByCell};
-        for (TextView cell : cells) {
-            cell.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        }
+        TextView idCell       = new TextView(this);
+        TextView nameCell     = new TextView(this);
+        TextView ageCell      = new TextView(this);
+        TextView emailCell    = new TextView(this);
+        TextView createdByCell= new TextView(this);
 
-        idCell.setText(String.valueOf(user.id));
-        nameCell.setText(user.name);
-        ageCell.setText(String.valueOf(user.age));
-        emailCell.setText(user.email);
-        createdByCell.setText(user.createdBy);
+        idCell.setLayoutParams(lp);
+        nameCell.setLayoutParams(lp);
+        ageCell.setLayoutParams(lp);
+        emailCell.setLayoutParams(lp);
+        createdByCell.setLayoutParams(lp);
 
-        // Code shorter again
-        for (TextView cell : cells) {
-            row.addView(cell);
-        }
+        idCell.setText(String.valueOf(id));
+        nameCell.setText(name);
+        ageCell.setText(String.valueOf(age));
+        emailCell.setText(email);
+        createdByCell.setText(createdBy);
+
+        row.addView(idCell);
+        row.addView(nameCell);
+        row.addView(ageCell);
+        row.addView(emailCell);
+        row.addView(createdByCell);
 
         usersTable.addView(row);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (db != null && db.isOpen()) {
+            db.close();
+        }
     }
 }

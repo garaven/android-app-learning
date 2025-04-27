@@ -48,7 +48,7 @@ public class updateSuperuser extends AppCompatActivity {
 
         ArrayList<Superuser> superusers = (ArrayList<Superuser>) getIntent().getSerializableExtra("superusers");
 
-        admin = new AdminSQLiteOpenHelper(this, "login", null, 1);
+        admin = AdminSQLiteOpenHelper.getInstance(this);
 
         searchButton.setOnClickListener(v -> handleSearchSuperuser());
         updateButton.setOnClickListener(v -> handleUpdateSuperuser());
@@ -102,7 +102,6 @@ public class updateSuperuser extends AppCompatActivity {
             Toast.makeText(this, "Todos los campos son obligatorios.", Toast.LENGTH_SHORT).show();
             return;
         }
-        //
 
         SQLiteDatabase dbInsert = admin.getWritableDatabase();
         ContentValues values = new ContentValues();
