@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                     sports = data.getStringExtra("deportes");
                     id = 1 + users.size();
 
-                    // Importa el orden, mire el constructor de la clase
                     User newUser = new User(name, secondName, email, docType, gender, age, id, docNumber, educationLevel, musicalTastes, sports, username);
                     users.add(newUser);
 

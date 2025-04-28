@@ -3,6 +3,9 @@ package com.example.calculatorandform;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -23,7 +26,8 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText usernameInput, passwordInput;
     Button login, adminPanel;
-    ArrayList<Superuser> superusers = new ArrayList<>();
+    SQLiteOpenHelper adminDB;
+    ArrayList<Superuser> superusersL = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,53 +41,43 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.superLoginButton);
         adminPanel = findViewById(R.id.adminPanelButton);
 
+        adminDB = AdminSQLiteOpenHelper.getInstance(this);
+
         login.setOnClickListener(x -> {
             String username = usernameInput.getText().toString();
             String password = passwordInput.getText().toString();
 
-            boolean validUser = false;
+            SQLiteDatabase dbRead = adminDB.getReadableDatabase();
+            Cursor cursor = dbRead.rawQuery("SELECT password FROM superusers WHERE username = ?", new String[] { username });
 
-            for (Superuser superuser : superusers) {
-                if (superuser.getUsername().equals(username) && superuser.getPassword().equals(password)) {
-                    validUser = true;
-                    break;
-                }
+            // Validations
+            if (cursor.getCount() == 0) {
+                Toast.makeText(this, "El usuario " + username + " no está registrado", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            if (validUser) {
-                Intent intentHome = new Intent(this, MainActivity.class);
-                intentHome.putExtra("superuser", username);
-                startActivity(intentHome);
-                finish();
-            } else {
+            String passwordObtained = "";
+            if (cursor != null && cursor.moveToFirst()) {
+                passwordObtained = cursor.getString(0);
+            }
+
+            if (!password.equals(passwordObtained)) {
                 Toast.makeText(this, "Credenciales incorrectas, intentalo de nuevo.", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            cursor.close();
+            dbRead.close();
+
+            Intent intentHome = new Intent(this, MainActivity.class);
+            intentHome.putExtra("superuser", username);
+            startActivity(intentHome);
+            finish();
         });
 
         adminPanel.setOnClickListener(x -> {
             Intent intentAdmin = new Intent(this, adminPanel.class);
-            intentAdmin.putExtra("superusers", superusers);
-            adminActivityResultLauncher.launch(intentAdmin);
+            startActivity(intentAdmin);
         });
     }
-
-    private final ActivityResultLauncher<Intent> adminActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    // Obtener la lista de superusuarios devuelta
-                    Intent data = result.getData();
-                    if (data != null) {
-                        ArrayList<Superuser> updatedSuperusers = (ArrayList<Superuser>) data.getSerializableExtra("updatedSuperusers");
-                        if (updatedSuperusers != null) {
-                            superusers.clear();
-                            superusers.addAll(updatedSuperusers);
-
-                            for (Superuser item : superusers) {
-                                Log.d("Mi app", "Superuser: " + item);
-                            }
-                        }
-                    }
-                }
-            }
-    );
 }

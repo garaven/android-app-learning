@@ -2,7 +2,10 @@ package com.example.calculatorandform;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 public class createSuperuser extends AppCompatActivity {
     EditText usernameInput, passwordInput;
     Button create;
-    ArrayList<Superuser> existingUsers = new ArrayList<>();
+    AdminSQLiteOpenHelper admin;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -38,34 +41,45 @@ public class createSuperuser extends AppCompatActivity {
         passwordInput = findViewById(R.id.contrasenaInput);
         create = findViewById(R.id.crearButton);
 
-        if (getIntent().hasExtra("superusers")) {
-            existingUsers = (ArrayList<Superuser>) getIntent().getSerializableExtra("superusers");
-        }
+        admin = AdminSQLiteOpenHelper.getInstance(this);
 
         create.setOnClickListener(x -> {
-            String username = usernameInput.getText().toString().trim().toLowerCase();
-            String password = passwordInput.getText().toString().trim();
+            String username = usernameInput.getText().toString();
+            String password = passwordInput.getText().toString();
 
+            // Validation
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Todos los campos son obligatorios.", Toast.LENGTH_SHORT).show();
                 return;
             }
+            //
 
-            for (Superuser user : existingUsers) {
-                if (user.getUsername().equalsIgnoreCase(username)) {
-                    Toast.makeText(this, "El nombre de usuario ya está registrado.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            // Search if the username is taken
+            SQLiteDatabase dbRead = admin.getReadableDatabase();
+            Cursor cursor = dbRead.rawQuery("SELECT username FROM superusers WHERE username = ?", new String[] { username });
+
+            if (cursor.getCount() > 0) {
+                Toast.makeText(this, "El nombre de usuario ya está registrado.", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            Intent intentSendInfo = new Intent();
-            intentSendInfo.putExtra("username", username);
-            intentSendInfo.putExtra("password", password);
-            Toast.makeText(this, "Usuario creado:\n" +
-                    "Username: " + username + "\n" +
-                    "Contraseña: " + password, Toast.LENGTH_LONG).show();
-            setResult(Activity.RESULT_OK, intentSendInfo);
-            finish();
+            cursor.close();
+            dbRead.close();
+            //
+
+            // Create the superuser
+            SQLiteDatabase dbInsert = admin.getWritableDatabase();
+            ContentValues file = new ContentValues();
+            file.put("username", username);
+            file.put("password", password);
+            dbInsert.insert("superusers", null, file);
+
+            usernameInput.setText("");
+            passwordInput.setText("");
+
+            dbInsert.close();
+            Toast.makeText(this, "Superusuario " + username + " agregado", Toast.LENGTH_SHORT).show();
+            //
         });
     }
 }

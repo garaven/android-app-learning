@@ -1,7 +1,10 @@
 package com.example.calculatorandform;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +22,8 @@ public class updateSuperuser extends AppCompatActivity {
 
     EditText searchUserInput, userInput, passwordInput;
     Button searchButton, updateButton;
+    AdminSQLiteOpenHelper admin;
+    String userToUpdate;
 
     private Superuser superuserSearched;
 
@@ -43,55 +48,77 @@ public class updateSuperuser extends AppCompatActivity {
 
         ArrayList<Superuser> superusers = (ArrayList<Superuser>) getIntent().getSerializableExtra("superusers");
 
-        searchButton.setOnClickListener(v -> handleSearchSuperuser(superusers));
-        updateButton.setOnClickListener(v -> handleUpdateSuperuser(superusers));
+        admin = AdminSQLiteOpenHelper.getInstance(this);
+
+        searchButton.setOnClickListener(v -> handleSearchSuperuser());
+        updateButton.setOnClickListener(v -> handleUpdateSuperuser());
     }
 
-    private void handleSearchSuperuser(ArrayList<Superuser> superusers) {
+    private void handleSearchSuperuser() {
         String searchUsername = searchUserInput.getText().toString().trim();
         if (searchUsername.isEmpty()) {
             Toast.makeText(this, "Ingrese un nombre de usuario", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        superuserSearched = findSuperuserByUsername(superusers, searchUsername);
-        if (superuserSearched != null) {
-            userInput.setText(superuserSearched.getUsername());
-            passwordInput.setText(superuserSearched.getPassword());
+        SQLiteDatabase dbRead = admin.getReadableDatabase();
+        Cursor cursor = dbRead.rawQuery("SELECT username, password FROM superusers WHERE username = ?", new String[] { searchUsername });
+
+        // Validations
+        if (cursor.getCount() == 0) {
+            Toast.makeText(this, "Superusuario no encontrado", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String usernameObtained = "";
+        String passwordObtained = "";
+
+        if (cursor != null && cursor.moveToFirst()) {
+            usernameObtained = cursor.getString(0);
+            passwordObtained = cursor.getString(1);
+
+            userInput.setText(usernameObtained);
+            passwordInput.setText(passwordObtained);
             updateButton.setEnabled(true);
             userInput.setEnabled(true);
             passwordInput.setEnabled(true);
+
+            userToUpdate = usernameObtained;
         } else {
             Toast.makeText(this, "Superusuario no encontrado", Toast.LENGTH_SHORT).show();
             updateButton.setEnabled(false);
         }
+
+        cursor.close();
+        dbRead.close();
     }
 
-    private Superuser findSuperuserByUsername(ArrayList<Superuser> superusers, String username) {
-        for (Superuser su : superusers) {
-            if (su.getUsername().equalsIgnoreCase(username)) {
-                return su;
-            }
-        }
-        return null;
-    }
+    private void handleUpdateSuperuser() {
+        String updatedUsername = userInput.getText().toString().toLowerCase();
+        String updatedPassword = passwordInput.getText().toString();
 
-    private void handleUpdateSuperuser(ArrayList<Superuser> superusers) {
-        if (superuserSearched != null) {
-            String updatedUsername = userInput.getText().toString().toLowerCase();
-            String updatedPassword = passwordInput.getText().toString();
-            superuserSearched.setUsername(updatedUsername);
-            superuserSearched.setPassword(updatedPassword);
-
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("updatedSuperusersList", superusers);
-            setResult(RESULT_OK, resultIntent);
-            Toast.makeText(this, "Superusuario actualizado:\n" +
-                    "Username: " + updatedUsername + "\n" +
-                    "Contraseña: " + updatedPassword, Toast.LENGTH_LONG).show();
-            finish();
-        } else {
-            Toast.makeText(this, "Primero busque un superusuario", Toast.LENGTH_SHORT).show();
+        // Validation
+        if (updatedUsername.isEmpty() || updatedPassword.isEmpty()) {
+            Toast.makeText(this, "Todos los campos son obligatorios.", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        SQLiteDatabase dbInsert = admin.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("username", updatedUsername);
+        values.put("password", updatedPassword);
+        int rowsUpdated = dbInsert.update("superusers", values, "username = ?", new String[] { userToUpdate });
+        if (rowsUpdated == 0) {
+            Toast.makeText(this, "Superusuario no encontrado", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        dbInsert.close();
+
+        Toast.makeText(this, "Superusuario actualizado:\n" +
+                "Username: " + updatedUsername + "\n" +
+                "Contraseña: " + updatedPassword, Toast.LENGTH_LONG).show();
+
+        userInput.setText("");
+        passwordInput.setText("");
     }
 }

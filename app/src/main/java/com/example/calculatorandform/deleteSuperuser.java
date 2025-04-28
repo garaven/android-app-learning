@@ -2,6 +2,7 @@ package com.example.calculatorandform;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,7 @@ public class deleteSuperuser extends AppCompatActivity {
     EditText usernameInput;
     Button deleteButton;
 
-    ArrayList<Superuser> superusers;
+    AdminSQLiteOpenHelper admin;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -38,8 +39,7 @@ public class deleteSuperuser extends AppCompatActivity {
         usernameInput = findViewById(R.id.createUsuarioInput);
         deleteButton = findViewById(R.id.deleteUsuarioButton);
 
-        // Recibe la lista desde adminPanel
-        superusers = (ArrayList<Superuser>) getIntent().getSerializableExtra("superusers");
+        admin = AdminSQLiteOpenHelper.getInstance(this);
 
         deleteButton.setOnClickListener(v -> handleDeleteUser());
     }
@@ -54,26 +54,20 @@ public class deleteSuperuser extends AppCompatActivity {
 
         boolean found = false;
 
-        for (int i = 0; i < superusers.size(); i++) {
-            if (superusers.get(i).getUsername().equalsIgnoreCase(usernameToDelete)) {
-                superusers.remove(i);
-                found = true;
-                break;
-            }
+        SQLiteDatabase dbDelete = admin.getWritableDatabase();
+        int rowsDeleted = dbDelete.delete("superusers", "username = ?", new String[] { usernameToDelete });
+        if (rowsDeleted > 0) {
+            found = true;
         }
+
+        dbDelete.close();
 
         if (found) {
             Toast.makeText(this, "Usuario eliminado correctamente", Toast.LENGTH_SHORT).show();
-            returnResult();
         } else {
             Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
         }
-    }
 
-    private void returnResult() {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("updatedSuperusersList", superusers);
-        setResult(RESULT_OK, resultIntent);
-        finish();
+        usernameInput.setText("");
     }
 }
