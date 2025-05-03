@@ -5,12 +5,17 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -22,6 +27,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.List;
+
 public class Form extends AppCompatActivity {
     private EditText name, secondName, age, email, docNumber;
     private Button register;
@@ -32,8 +48,9 @@ public class Form extends AppCompatActivity {
 
     private AdminSQLiteOpenHelper dbHelper;
     private SQLiteDatabase db;
-    private int currentSuperuserId = 1;
     private String superusername;
+
+    private static final String TEMP_FILE = "form_temp.txt";
 
     private static final String[] DOC_TYPES = {
             "Tarjeta de identidad",
@@ -54,13 +71,7 @@ public class Form extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         superusername = getIntent().getStringExtra("superuser");
-        Log.d("Form", "Nombre del superusuario recibido: " + superusername);
-
-        if (superusername != null) {
-            currentSuperuserId = 1;
-        }
 
         dbHelper = AdminSQLiteOpenHelper.getInstance(this);
         db = dbHelper.getWritableDatabase();
@@ -73,43 +84,82 @@ public class Form extends AppCompatActivity {
             return insets;
         });
 
-        name = findViewById(R.id.nameInput);
-        secondName = findViewById(R.id.secondNameInput);
-        age = findViewById(R.id.ageInput);
-        email = findViewById(R.id.emailInput);
-        docNumber = findViewById(R.id.inputDocNumber);
-        radioMale = findViewById(R.id.radioMale);
-        radioFemale = findViewById(R.id.radioFemale);
-        register = findViewById(R.id.registerButton);
+        name                = findViewById(R.id.nameInput);
+        secondName          = findViewById(R.id.secondNameInput);
+        age                 = findViewById(R.id.ageInput);
+        email               = findViewById(R.id.emailInput);
+        docNumber           = findViewById(R.id.inputDocNumber);
+        radioMale           = findViewById(R.id.radioMale);
+        radioFemale         = findViewById(R.id.radioFemale);
+        register            = findViewById(R.id.registerButton);
 
-        spinnerDocTypes = findViewById(R.id.spinnerDocType);
-        spinnerDocTypes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, DOC_TYPES));
-
+        spinnerDocTypes     = findViewById(R.id.spinnerDocType);
         spinnerEducationLevel = findViewById(R.id.spinnerEducationLevel);
+
+        checkboxRock        = findViewById(R.id.checkboxRock);
+        checkboxPop         = findViewById(R.id.checkboxPop);
+        checkboxRap         = findViewById(R.id.checkboxRap);
+        checkboxJazz        = findViewById(R.id.checkboxJazz);
+        checkboxClassical   = findViewById(R.id.checkboxClassical);
+        checkboxOther       = findViewById(R.id.checkboxOther);
+
+        checkboxFootball    = findViewById(R.id.checkboxFootball);
+        checkboxBasketball  = findViewById(R.id.checkboxBasketball);
+        checkboxTennis      = findViewById(R.id.checkboxTennis);
+        checkboxRunning     = findViewById(R.id.checkboxRunning);
+        checkboxSwimming    = findViewById(R.id.checkboxSwimming);
+        checkboxCycling     = findViewById(R.id.checkboxCycling);
+
+        spinnerDocTypes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, DOC_TYPES));
+        spinnerDocTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) { guardarTemp(); }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         spinnerEducationLevel.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, EDUCATION_LEVELS));
+        spinnerEducationLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) { guardarTemp(); }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
-        checkboxRock = findViewById(R.id.checkboxRock);
-        checkboxPop = findViewById(R.id.checkboxPop);
-        checkboxRap = findViewById(R.id.checkboxRap);
-        checkboxJazz = findViewById(R.id.checkboxJazz);
-        checkboxClassical = findViewById(R.id.checkboxClassical);
-        checkboxOther = findViewById(R.id.checkboxOther);
+        restaurarTemp();
 
-        checkboxFootball = findViewById(R.id.checkboxFootball);
-        checkboxBasketball = findViewById(R.id.checkboxBasketball);
-        checkboxTennis = findViewById(R.id.checkboxTennis);
-        checkboxRunning = findViewById(R.id.checkboxRunning);
-        checkboxSwimming = findViewById(R.id.checkboxSwimming);
-        checkboxCycling = findViewById(R.id.checkboxCycling);
+        TextWatcher saver = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            @Override public void afterTextChanged(Editable s) { guardarTemp(); }
+        };
+        name.addTextChangedListener(saver);
+        secondName.addTextChangedListener(saver);
+        age.addTextChangedListener(saver);
+        email.addTextChangedListener(saver);
+        docNumber.addTextChangedListener(saver);
+
+        radioMale.setOnCheckedChangeListener((btn, checked) -> { if (checked) guardarTemp(); });
+        radioFemale.setOnCheckedChangeListener((btn, checked) -> { if (checked) guardarTemp(); });
+
+        CompoundButton.OnCheckedChangeListener cbSaver = (btn, checked) -> guardarTemp();
+        checkboxRock.setOnCheckedChangeListener(cbSaver);
+        checkboxPop.setOnCheckedChangeListener(cbSaver);
+        checkboxRap.setOnCheckedChangeListener(cbSaver);
+        checkboxJazz.setOnCheckedChangeListener(cbSaver);
+        checkboxClassical.setOnCheckedChangeListener(cbSaver);
+        checkboxOther.setOnCheckedChangeListener(cbSaver);
+        checkboxFootball.setOnCheckedChangeListener(cbSaver);
+        checkboxBasketball.setOnCheckedChangeListener(cbSaver);
+        checkboxTennis.setOnCheckedChangeListener(cbSaver);
+        checkboxRunning.setOnCheckedChangeListener(cbSaver);
+        checkboxSwimming.setOnCheckedChangeListener(cbSaver);
+        checkboxCycling.setOnCheckedChangeListener(cbSaver);
 
         register.setOnClickListener(v -> {
-            if (!validarFormulario()) {
-                return;
-            }
+            // checkpoint
+            guardarTemp();
+            if (!validarFormulario()) return;
 
             String nombre = name.getText().toString().trim();
             String apellido = secondName.getText().toString().trim();
-            int edad = Integer.parseInt(age.getText().toString().trim());
+            int edadNum = Integer.parseInt(age.getText().toString().trim());
             String correo = email.getText().toString().trim();
             int numeroDoc = Integer.parseInt(docNumber.getText().toString().trim());
             String tipoDocumento = spinnerDocTypes.getSelectedItem().toString();
@@ -122,7 +172,7 @@ public class Form extends AppCompatActivity {
             cvUser.put("email", correo);
             cvUser.put("docType", tipoDocumento);
             cvUser.put("gender", genero);
-            cvUser.put("age", edad);
+            cvUser.put("age", edadNum);
             cvUser.put("docNumber", numeroDoc);
             cvUser.put("educationLevel", nivelEducacion);
             cvUser.put("createdBy", superusername);
@@ -133,48 +183,46 @@ public class Form extends AppCompatActivity {
                 return;
             }
 
-            StringBuilder gustosMusicales = new StringBuilder();
-            if (checkboxRock.isChecked()) gustosMusicales.append("Rock, ");
-            if (checkboxPop.isChecked()) gustosMusicales.append("Pop, ");
-            if (checkboxRap.isChecked()) gustosMusicales.append("Rap, ");
-            if (checkboxJazz.isChecked()) gustosMusicales.append("Jazz, ");
-            if (checkboxClassical.isChecked()) gustosMusicales.append("Clásica, ");
-            if (checkboxOther.isChecked()) gustosMusicales.append("Reggaeton, ");
-            if (gustosMusicales.length() > 0) {
-                gustosMusicales.delete(gustosMusicales.length() - 2, gustosMusicales.length());
-            }
+            // preferencias
+            StringBuilder gustos = new StringBuilder();
+            if (checkboxRock.isChecked())      gustos.append("Rock, ");
+            if (checkboxPop.isChecked())       gustos.append("Pop, ");
+            if (checkboxRap.isChecked())       gustos.append("Rap, ");
+            if (checkboxJazz.isChecked())      gustos.append("Jazz, ");
+            if (checkboxClassical.isChecked()) gustos.append("Clásica, ");
+            if (checkboxOther.isChecked())     gustos.append("Reggaeton, ");
+            if (gustos.length()>0) gustos.setLength(gustos.length()-2);
 
-            StringBuilder deportes = new StringBuilder();
-            if (checkboxFootball.isChecked()) deportes.append("Fútbol, ");
-            if (checkboxBasketball.isChecked()) deportes.append("Baloncesto, ");
-            if (checkboxTennis.isChecked()) deportes.append("Tenis, ");
-            if (checkboxRunning.isChecked()) deportes.append("Correr, ");
-            if (checkboxSwimming.isChecked()) deportes.append("Natación, ");
-            if (checkboxCycling.isChecked()) deportes.append("Ciclismo, ");
-            if (deportes.length() > 0) {
-                deportes.delete(deportes.length() - 2, deportes.length());
-            }
+            StringBuilder deps = new StringBuilder();
+            if (checkboxFootball.isChecked())   deps.append("Fútbol, ");
+            if (checkboxBasketball.isChecked()) deps.append("Baloncesto, ");
+            if (checkboxTennis.isChecked())     deps.append("Tenis, ");
+            if (checkboxRunning.isChecked())    deps.append("Correr, ");
+            if (checkboxSwimming.isChecked())   deps.append("Natación, ");
+            if (checkboxCycling.isChecked())    deps.append("Ciclismo, ");
+            if (deps.length()>0) deps.setLength(deps.length()-2);
 
-            ContentValues cvPreferences = new ContentValues();
-            cvPreferences.put("userId", userId);
-            cvPreferences.put("musicTaste", gustosMusicales.toString());
-            cvPreferences.put("sports", deportes.toString());
-            db.insert("preferences", null, cvPreferences);
+            ContentValues cvPref = new ContentValues();
+            cvPref.put("userId", userId);
+            cvPref.put("musicTaste", gustos.toString());
+            cvPref.put("sports", deps.toString());
+            db.insert("preferences", null, cvPref);
 
+            // hecho: limpia y retorna
+            deleteFile(TEMP_FILE);
             Toast.makeText(this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
 
             Intent out = new Intent();
             out.putExtra("nombre", nombre);
             out.putExtra("apellido", apellido);
-            out.putExtra("edad", String.valueOf(edad));
+            out.putExtra("edad", String.valueOf(edadNum));
             out.putExtra("correo", correo);
             out.putExtra("tipo-documento", tipoDocumento);
             out.putExtra("numero-documento", String.valueOf(numeroDoc));
             out.putExtra("genero", genero);
             out.putExtra("nivel-educacion", nivelEducacion);
-            out.putExtra("gustos-musicales", gustosMusicales.toString());
-            out.putExtra("deportes", deportes.toString());
-
+            out.putExtra("gustos-musicales", gustos.toString());
+            out.putExtra("deportes", deps.toString());
             setResult(Activity.RESULT_OK, out);
             finish();
         });
@@ -235,6 +283,108 @@ public class Form extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void guardarTemp() {
+        try (FileOutputStream fos = openFileOutput(TEMP_FILE, MODE_PRIVATE);
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos))) {
+
+            writer.write("name=" + name.getText().toString().trim());             writer.newLine();
+            writer.write("secondName=" + secondName.getText().toString().trim()); writer.newLine();
+            writer.write("age=" + age.getText().toString().trim());               writer.newLine();
+            writer.write("email=" + email.getText().toString().trim());           writer.newLine();
+            writer.write("docNumber=" + docNumber.getText().toString().trim());   writer.newLine();
+            writer.write("gender=" + (radioMale.isChecked() ? "Masculino" : radioFemale.isChecked() ? "Femenino" : "")); writer.newLine();
+            writer.write("docType=" + spinnerDocTypes.getSelectedItem().toString()); writer.newLine();
+            writer.write("educationLevel=" + spinnerEducationLevel.getSelectedItem().toString()); writer.newLine();
+
+            StringBuilder mus = new StringBuilder();
+            if (checkboxRock.isChecked())      mus.append("Rock,");
+            if (checkboxPop.isChecked())       mus.append("Pop,");
+            if (checkboxRap.isChecked())       mus.append("Rap,");
+            if (checkboxJazz.isChecked())      mus.append("Jazz,");
+            if (checkboxClassical.isChecked()) mus.append("Clásica,");
+            if (checkboxOther.isChecked())     mus.append("Reggaeton,");
+            writer.write("music=" + mus.toString()); writer.newLine();
+
+            StringBuilder deps = new StringBuilder();
+            if (checkboxFootball.isChecked())   deps.append("Fútbol,");
+            if (checkboxBasketball.isChecked()) deps.append("Baloncesto,");
+            if (checkboxTennis.isChecked())     deps.append("Tenis,");
+            if (checkboxRunning.isChecked())    deps.append("Correr,");
+            if (checkboxSwimming.isChecked())   deps.append("Natación,");
+            if (checkboxCycling.isChecked())    deps.append("Ciclismo,");
+            writer.write("sports=" + deps.toString());
+
+        } catch (IOException ex) {
+            Log.e("Form", "Error saving temp file", ex);
+        }
+    }
+
+    private void restaurarTemp() {
+        File file = new File(getFilesDir(), TEMP_FILE);
+        if (!file.exists()) return;
+
+        try (FileInputStream fis = openFileInput(TEMP_FILE);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(fis))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("=", 2);
+                if (parts.length < 2) continue;
+                String key = parts[0], val = parts[1];
+
+                switch (key) {
+                    case "name":
+                        name.setText(val);
+                        break;
+                    case "secondName":
+                        secondName.setText(val);
+                        break;
+                    case "age":
+                        age.setText(val);
+                        break;
+                    case "email":
+                        email.setText(val);
+                        break;
+                    case "docNumber":
+                        docNumber.setText(val);
+                        break;
+                    case "gender":
+                        radioMale.setChecked("Masculino".equals(val));
+                        radioFemale.setChecked("Femenino".equals(val));
+                        break;
+                    case "docType":
+                        int docIdx = Arrays.asList(DOC_TYPES).indexOf(val);
+                        if (docIdx >= 0) spinnerDocTypes.setSelection(docIdx);
+                        break;
+                    case "educationLevel":
+                        int eduIdx = Arrays.asList(EDUCATION_LEVELS).indexOf(val);
+                        if (eduIdx >= 0) spinnerEducationLevel.setSelection(eduIdx);
+                        break;
+                    case "music":
+                        List<String> musList = Arrays.asList(val.split(","));
+                        checkboxRock.setChecked(musList.contains("Rock"));
+                        checkboxPop.setChecked(musList.contains("Pop"));
+                        checkboxRap.setChecked(musList.contains("Rap"));
+                        checkboxJazz.setChecked(musList.contains("Jazz"));
+                        checkboxClassical.setChecked(musList.contains("Clásica"));
+                        checkboxOther.setChecked(musList.contains("Reggaeton"));
+                        break;
+                    case "sports":
+                        List<String> spList = Arrays.asList(val.split(","));
+                        checkboxFootball.setChecked(spList.contains("Fútbol"));
+                        checkboxBasketball.setChecked(spList.contains("Baloncesto"));
+                        checkboxTennis.setChecked(spList.contains("Tenis"));
+                        checkboxRunning.setChecked(spList.contains("Correr"));
+                        checkboxSwimming.setChecked(spList.contains("Natación"));
+                        checkboxCycling.setChecked(spList.contains("Ciclismo"));
+                        break;
+                }
+            }
+        } catch (IOException ex) {
+            Log.e("Form", "Error restoring temp file", ex);
+        }
     }
 
     @Override
