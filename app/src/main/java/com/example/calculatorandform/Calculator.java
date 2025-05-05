@@ -1,14 +1,31 @@
 package com.example.calculatorandform;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class Calculator extends AppCompatActivity {
-    Button number1, number2, number3, number4, number5, number6, number7, number8, number9, number0;
+    Button number1, number2, number3, number4, number5, number6, number7, number8, number9, number0, showHistory;
     Button clear, equal, add, sustraction, backspace, product, division, decimal;
     TextView screen;
 
@@ -18,11 +35,28 @@ public class Calculator extends AppCompatActivity {
     boolean isNewOperation;
     boolean operationJustPressed;
 
+    private static final String HISTORY_FILE = "calculator_history.txt";
+    private static final int MAX_HISTORY_ENTRIES = 100;
+    private List<String> calculationHistory;
+
+    private final ActivityResultLauncher<Intent> historyLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == History.HISTORY_CLEARED) {
+                    calculationHistory.clear();
+                    Log.d("Calculator", "Historial borrado en memoria");
+                }
+            });
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.calculator);
+
+        calculationHistory = new ArrayList<>();
+        cargarHistorial();
 
         screen = findViewById(R.id.screen);
         number1 = findViewById(R.id.number1);
@@ -66,6 +100,12 @@ public class Calculator extends AppCompatActivity {
         clear.setOnClickListener(x -> resetCalculator());
         equal.setOnClickListener(x -> calculate());
         backspace.setOnClickListener(x -> handleBackspace());
+
+        showHistory = findViewById(R.id.showHistory);
+        showHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(Calculator.this, History.class);
+            historyLauncher.launch(intent);  // Usar el launcher en lugar de startActivity
+        });
     }
 
     private void resetCalculator() {
@@ -82,6 +122,7 @@ public class Calculator extends AppCompatActivity {
     public void identifyOperation(String op) {
         if (operationJustPressed) {
             operation = op;
+            Toast.makeText(this, "Operación cambiada a " + op, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -114,11 +155,14 @@ public class Calculator extends AppCompatActivity {
             } else {
                 screen.setText(input);
             }
+        } else {
+            Toast.makeText(this, "Nada para borrar", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void calculate() {
         if (operation.isEmpty()) {
+            Toast.makeText(this, "Primero selecciona una operación", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -127,6 +171,8 @@ public class Calculator extends AppCompatActivity {
         } else {
             second_number = Double.parseDouble(input);
         }
+
+        String operationStr = formatNumber(first_number) + " " + operation + " " + formatNumber(second_number);
 
         try {
             switch (operation) {
@@ -141,7 +187,7 @@ public class Calculator extends AppCompatActivity {
                     break;
                 case "/":
                     if (second_number == 0) {
-                        screen.setText("Error");
+                        Toast.makeText(this, "No se puede dividir por cero", Toast.LENGTH_SHORT).show();
                         resetCalculator();
                         return;
                     }
@@ -149,14 +195,12 @@ public class Calculator extends AppCompatActivity {
                     break;
             }
 
-            String resultText;
-            if (result == Math.floor(result)) {
-                resultText = String.format("%.0f", result);
-            } else {
-                resultText = String.valueOf(result);
-            }
-
+            String resultText = formatNumber(result);
             screen.setText(resultText);
+
+            String fullOperation = operationStr + " = " + resultText;
+            agregarAlHistorial(fullOperation);
+
             first_number = result;
             input = "";
             operation = "";
@@ -164,7 +208,7 @@ public class Calculator extends AppCompatActivity {
             operationJustPressed = false;
 
         } catch (Exception e) {
-            screen.setText("Error");
+            Toast.makeText(this, "Error al calcular", Toast.LENGTH_SHORT).show();
             resetCalculator();
         }
     }
@@ -178,6 +222,7 @@ public class Calculator extends AppCompatActivity {
         operationJustPressed = false;
 
         if (input.equals("0") && number.equals("0")) {
+            Toast.makeText(this, "Ya hay un cero inicial", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -204,6 +249,69 @@ public class Calculator extends AppCompatActivity {
             }
             input += ".";
             screen.setText(input);
+        } else {
+            Toast.makeText(this, "Ya hay un punto decimal", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String formatNumber(Double number) {
+        if (number == Math.floor(number)) {
+            return String.format(Locale.getDefault(), "%.0f", number);
+        } else {
+            return String.valueOf(number);
+        }
+    }
+
+    private void agregarAlHistorial(String operacion) {
+        calculationHistory.add(0, operacion);
+
+        if (calculationHistory.size() > MAX_HISTORY_ENTRIES) {
+            calculationHistory = calculationHistory.subList(0, MAX_HISTORY_ENTRIES);
+        }
+        guardarHistorial();
+    }
+
+    private void guardarHistorial() {
+        try (FileOutputStream fos = openFileOutput(HISTORY_FILE, MODE_PRIVATE);
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos))) {
+
+            for (String operacion : calculationHistory) {
+                writer.write(operacion);
+                writer.newLine();
+            }
+
+        } catch (IOException ex) {
+            Log.e("Calculator", "Error guardando historial", ex);
+            Toast.makeText(this, "No se pudo guardar el historial", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void cargarHistorial() {
+        calculationHistory.clear();
+
+        try (FileInputStream fis = openFileInput(HISTORY_FILE);
+             InputStreamReader isr = new InputStreamReader(fis);
+             BufferedReader reader = new BufferedReader(isr)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                calculationHistory.add(line);
+            }
+
+        } catch (IOException e) {
+            Log.d("Calculator", "No se encontró historial o está vacío");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarHistorial();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        guardarHistorial();
     }
 }
